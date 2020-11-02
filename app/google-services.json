@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "234696244026",
+    "firebase_url": "https://healthy-basket-285409.firebaseio.com",
+    "project_id": "healthy-basket-285409",
+    "storage_bucket": "healthy-basket-285409.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234696244026:android:755c2b0ce7ff093aff2e03",
+        "android_client_info": {
+          "package_name": "com.healthy.basket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234696244026-cjsbj7t3rjdkqrjjdfarba95b1egbe6d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6HKob2LmvdRadWd-oP62hjQfdnvxhbCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234696244026-cjsbj7t3rjdkqrjjdfarba95b1egbe6d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

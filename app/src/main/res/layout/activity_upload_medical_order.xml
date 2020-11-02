@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.UploadMedicalOrderActivity"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/uploadMedicalPrescription"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/prescription"/>
+
+        <LinearLayout
+            android:id="@+id/rel_camara"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_below="@+id/uploadMedicalPrescription"
+            android:layout_marginTop="10dp">
+
+            <LinearLayout
+                android:id="@+id/uploadMedicalCamera"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/check_out_btn"
+                android:text="@string/txt_take_a_picture"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera_24dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_take_a_picture"
+                    android:textColor="#fff"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/uploadMedicalGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:background="@drawable/check_out_btn"
+                android:text="@string/txt_take_a_picture"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginStart="10dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_insert_photo_24dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_select_picture"
+                    android:textColor="#fff"/>
+            </LinearLayout>
+
+
+<!--            <Button-->
+<!--                android:id="@+id/uploadMedicalCamera"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:background="@drawable/check_out_btn"-->
+<!--                android:text="@string/txt_take_a_picture"-->
+<!--                android:textColor="#fff"-->
+<!--                android:layout_weight="1"/>-->
+
+<!--            <Button-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="50dp"-->
+<!--                android:id="@+id/uploadMedicalGallery"-->
+<!--                android:background="@drawable/check_out_btn"-->
+<!--                android:text="@string/txt_select_picture"-->
+<!--                android:textColor="#fff"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_marginStart="10dp"/>-->
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/uploadMedicalNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rel_camara"
+            android:layout_marginTop="10dp"
+            android:minHeight="100dp"
+            android:padding="2dp"
+            android:hint="Note"
+            android:gravity="start"
+            android:textAlignment="textStart"/>
+
+        <Button
+            android:id="@+id/uploadMedicalUpload"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/check_out_btn"
+            android:text="@string/txt_continue"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/medium"
+            android:layout_below="@+id/uploadMedicalNote"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            tools:ignore="SpUsage" />
+<!--        <Button-->
+<!--            android:id="@+id/uploadMedicalUpload"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Upload"-->
+<!--            android:layout_below="@+id/uploadMedicalNote"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            />-->
+
+        <ProgressBar
+            android:id="@+id/uploadMedicalProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</ScrollView>

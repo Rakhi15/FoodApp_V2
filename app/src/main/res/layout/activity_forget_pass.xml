@@ -1,0 +1,142 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.healthy.basket.activity.ForgetPasswordActivity">
+
+    <RelativeLayout
+        android:id="@+id/rel_header"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/toolbarheight"
+        android:background="@color/toolbarcolor">
+
+        <ImageButton
+            android:id="@+id/forgetPassBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/forgetPassTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/forgetPassBack"
+            android:text="@string/txt_forget_pass"
+            android:textColor="#fff"
+            android:textSize="@dimen/toolbartitle"
+            tools:ignore="SpUsage" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_center"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/rel_header"
+        >
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/forgetPassLogo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="32dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/img_delivery"
+                    android:src="@drawable/img_loginscreen" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/forgetPassPhoneInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/forgetPassLogo"
+                    android:layout_marginTop="16dp">
+
+                    <EditText
+                        android:id="@+id/forgetPassPhone"
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:hint="@string/mobile_required"
+                        android:inputType="text"
+                        android:textAlignment="viewStart"
+                        android:textColor="#000"
+                        android:textSize="@dimen/medium"
+                        tools:ignore="SpUsage" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/forgetPassBtn"
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/forgetPassPhoneInput"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@mipmap/login_btn_bg"
+                    android:text="@string/txt_forget_pass"
+                    android:textAllCaps="false"
+                    android:textColor="#8D1926"
+                    android:textSize="@dimen/medium"
+                    tools:ignore="SpUsage" />
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@+id/forgetPassBtn"-->
+<!--                    android:layout_marginTop="34dp"-->
+<!--                    android:visibility="gone">-->
+<!--                <TextView-->
+<!--                    android:id="@+id/btn_register"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:text="@string/txt_new_register"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="#8D1926"-->
+<!--                    android:textSize="@dimen/medium"-->
+<!--                    tools:ignore="SpUsage"-->
+<!--                    android:layout_weight="1"/>-->
+<!--                    <TextView-->
+<!--                    android:id="@+id/btn_forget_pass"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@android:color/transparent"-->
+<!--                    android:text="@string/txt_forget_pass"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textAllCaps="false"-->
+<!--                    android:textColor="#8D1926"-->
+<!--                    android:textSize="@dimen/medium"-->
+<!--                    tools:ignore="SpUsage"-->
+<!--                        android:layout_weight="1"/>-->
+<!--                </LinearLayout>-->
+
+            </RelativeLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/forgetPassProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

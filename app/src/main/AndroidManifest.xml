@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.healthy.basket">
+
+
+    <uses-permission android:name="com.androidbunch.drawroutev2.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+
+    <application
+        android:name="com.healthy.basket.AppClass"
+        android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
+        android:icon="@mipmap/logo"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBtA9NFKy55PO2oH37NLUntcmURE24qBC4" />
+        <!-- <meta-data -->
+        <!-- android:name="com.google.android.maps.v2.API_KEY" -->
+        <!-- android:value="AIzaSyC5y5Fr0W469Ue11PStVof7P8blFhUHiYA" /> -->
+        <!-- android:value="AIzaSyBQV34ELOeTH1_dD_knh5lixFcZWYujwqY" -->
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <meta-data
+            android:name="DATABASE"
+            android:value="restaurant.sqlite" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713" />
+
+        <activity
+            android:name="com.healthy.basket.activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.DetailPage"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Favourite"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.ProductList"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Category"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Cart"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Review"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Register"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name="com.healthy.basket.activity.Aboutus"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Termcondition"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.MedicalOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:label="My Medicine Order"/>
+        <activity android:name=".activity.UploadMedicalOrderActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:label="Upload Prescription"/>
+        <activity
+            android:name="com.healthy.basket.activity.Splash"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- facebook settings -->
+
+        <!-- start -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="@string/fb_login_protocol_scheme"
+                    tools:ignore="ManifestResource" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider2000030113588408____2000030113588408"
+            android:exported="true" />
+
+        <!-- end -->
+
+        <activity
+            android:name="com.healthy.basket.activity.Login"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.healthy.basket.activity.Profile"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
+        <activity
+            android:name="com.healthy.basket.activity.Mapactivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.MostRatedStores"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.MyOrderPage"
+            android:screenOrientation="portrait" />
+
+        <!-- setting of firebase -->
+
+        <service android:name="com.healthy.basket.utils.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="com.healthy.basket.utils.GPSTracker" />
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <activity
+            android:name="com.healthy.basket.activity.PlaceOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.CompleteOrder"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.SettingPage"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.LoginAsDelivery"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.DeliveryStatus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.DeliveryUserProfile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.DeliveryOrderDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.healthy.basket.activity.DeliveryOrderHistory"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.OrderSpecification" />
+        <activity android:name=".activity.ForgetPasswordActivity"
+            android:theme="@style/NoActionBar"/>
+
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="4c3bf8b832aed21e1dd8cda2dd72dd3e6e9b15a2" />
+    </application>
+
+</manifest>
