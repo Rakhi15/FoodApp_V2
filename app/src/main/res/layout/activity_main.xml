@@ -108,6 +108,52 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/textData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/openclose_timing"
+                                    android:text="Orders will close within 2D: 22Mins : 30 Sec"
+                                    android:textAlignment="center"
+                                    android:textSize="16sp"
+                                    android:textColor="#E61708"
+                                    />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Notification:"
+                                    android:textColor="@android:color/black"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginLeft="5dp"
+                                    />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/marqueeTxt"
+                                    android:textSize="16dp"
+                                    android:singleLine="true"
+                                    android:scrollHorizontally="true"
+                                    android:text="New Notification scrolling code done.. watch the sample text scrolling"
+                                    android:textColor="#26A69A"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginRight="5dp"
+                                    />
+                            </LinearLayout>
+                        </RelativeLayout>
+
                         <RelativeLayout
                             android:id="@+id/mainOrderMedicine"
                             android:layout_width="match_parent"
@@ -274,7 +320,29 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </RelativeLayout>
+                        <RelativeLayout
+                            android:id="@+id/muttonOrder"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@color/white">
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:scaleType="fitXY"
+                                    android:layout_height="100dp"
+                                    android:src="@drawable/frsh_meat"
+                                    android:clickable="true"
+                                    android:id="@+id/muttonMeat"
+                                    />
+                            </LinearLayout>
+                        </RelativeLayout>
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/mainGridView"
                             android:layout_width="match_parent"

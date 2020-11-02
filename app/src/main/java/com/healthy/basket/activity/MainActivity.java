@@ -27,6 +27,7 @@ import android.os.Environment;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.TypefaceSpan;
 import android.util.Base64;
@@ -184,6 +185,15 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
     private ArrayList<ordergetset> orderlist;
     sqliteHelper sqliteHelper;
 
+
+    //oakspro
+
+    ImageView meatMutton;
+    TextView notificationtxt;
+
+
+    //oakspro end
+
     public static boolean checkInternet(Context context) {
         // TODO Auto-generated method stub
         ConnectionDetector cd = new ConnectionDetector(context);
@@ -196,6 +206,8 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.activity_main);
+
+        meatMutton=(ImageView)findViewById(R.id.muttonMeat);
 
         FirebaseApp.initializeApp(this);
         FirebaseInstanceId.getInstance().getInstanceId();
@@ -248,6 +260,22 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 //        gridView.setHasFixedSize(true);
 //        gridView.setNestedScrollingEnabled(false);
         productlist = new ArrayList<>();
+
+
+        notificationtxt=findViewById(R.id.marqueeTxt);
+        notificationtxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+        notificationtxt.setSelected(true);
+
+
+
+        meatMutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mutton_intent=new Intent(MainActivity.this, MuttonOrderActivity.class);
+                startActivity(mutton_intent);
+            }
+        });
+
 
         RelativeLayout cardView = findViewById(R.id.mainOrderMedicine);
         cardView.setOnClickListener(new View.OnClickListener() {
