@@ -4,6 +4,12 @@
 
       tools:context="com.healthy.basket.activity.MainActivity">
 
+    <item android:id="@+id/action_refresh"
+        android:title=""
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/refresh_new"
+        />
     <item android:id="@+id/action_setting"
         android:title=""
         android:orderInCategory="100"

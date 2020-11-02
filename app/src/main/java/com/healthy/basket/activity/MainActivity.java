@@ -922,6 +922,8 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                 dialog.create().show();
             }
             return true;
+        }else if (id == R.id.action_refresh){
+            startActivity(new Intent(MainActivity.this, MainActivity.class));
         }
 
         // Activate the navigation drawer toggle
