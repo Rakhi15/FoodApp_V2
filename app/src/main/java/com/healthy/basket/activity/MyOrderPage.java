@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.healthy.basket.AppClass;
 import com.healthy.basket.Getset.myOrderGetSet;
+import com.healthy.basket.Getset.orderDetailGetSet;
 import com.healthy.basket.R;
 import com.healthy.basket.utils.sqliteHelper;
 import com.google.android.gms.ads.AdListener;
@@ -31,7 +32,17 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static com.healthy.basket.activity.MainActivity.changeStatsBarColor;
 import static com.healthy.basket.activity.MainActivity.checkInternet;
@@ -123,6 +134,43 @@ public class MyOrderPage extends AppCompatActivity {
                         String txt_orderId = cur.getString(cur.getColumnIndex("orderId"));
                         String txt_orderAmount = cur.getString(cur.getColumnIndex("orderAmount"));
                         String txt_orderTime = cur.getString(cur.getColumnIndex("orderTime"));
+                        try {
+                            URL hp = new URL(getString(R.string.link) + getString(R.string.servicepath) + "/order_details.php?order_id=" + txt_orderId);
+                            Log.e("URLmenu", "" + hp);
+                            URLConnection ohpCon = hp.openConnection();
+                            ohpCon.connect();
+                            InputStream oinput = ohpCon.getInputStream();
+                            Log.d("input", "" + oinput);
+                            BufferedReader schedulerReader = new BufferedReader(new InputStreamReader(oinput));
+                            String y;
+                            y = schedulerReader.readLine();
+                            StringBuilder totalBuilder = new StringBuilder();
+                            while (y != null) {
+                                totalBuilder.append(y);
+                                y = schedulerReader.readLine();
+                            }
+
+                            JSONObject jobj = new JSONObject(totalBuilder.toString());
+                            if (jobj.getString("success").equals("1")) {
+
+
+                                JSONArray jo_array= jobj.getJSONArray("order_details");
+                                JSONObject jo_order = jo_array.getJSONObject(0);
+                                String is_scheduled = jo_order.getString("is_scheduled");
+                                if(is_scheduled.equals("1")){
+                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                                    Date finalDay = (Date) sdf.parse(jo_order.getString("delivery_time"));
+                                    Long daysLeft =
+                                            (( finalDay.getTime()- System.currentTimeMillis()) / 1000)/86400;
+                                    obj.setIs_scheduled(true);
+                                    String deliveryDays = String.format("%d", daysLeft);
+                                    obj.setScheduled_time(deliveryDays);
+                                }
+
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
 
                         obj.setResName(txt_restaurantName);
                         obj.setResAddress(txt_restaurantAddress);
@@ -216,7 +264,13 @@ public class MyOrderPage extends AppCompatActivity {
             txt_res_name.setText(dat.get(position).getResName().substring(0, 1));
 
             TextView txt_order_date = vi.findViewById(R.id.txt_order_date);
-            txt_order_date.setText("Order Date: " + dat.get(position).getOrder_dateTime());
+            if(dat.get(position).isIs_scheduled()) {
+                if(dat.get(position).getScheduled_time().equals("0"))
+                    txt_order_date.setText("Arriving Today");
+                else
+                    txt_order_date.setText("Arriving In "+dat.get(position).getScheduled_time()+ " Day(s)");
+            }else
+                txt_order_date.setText("Order Date: " + dat.get(position).getOrder_dateTime());
 
             TextView txt_total_tittle = vi.findViewById(R.id.txt_total_tittle);
             TextView txt_total = vi.findViewById(R.id.txt_total);

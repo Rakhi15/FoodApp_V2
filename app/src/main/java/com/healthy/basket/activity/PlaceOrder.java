@@ -142,6 +142,7 @@ public class PlaceOrder extends AppCompatActivity implements OnMapReadyCallback,
         TextView txt_header = findViewById(R.id.txt_title);
         txt_header.setTypeface(MainActivity.tf_opensense_regular);
         edt_address = findViewById(R.id.edt_address);
+        edt_address.setFocusable(false);
         edt_address.setTypeface(MainActivity.tf_opensense_regular);
         RelativeLayout rel_main = findViewById(R.id.rel_main);
 

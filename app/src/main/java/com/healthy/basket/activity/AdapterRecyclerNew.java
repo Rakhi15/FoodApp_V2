@@ -1,7 +1,10 @@
 package com.healthy.basket.activity;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.healthy.basket.R;
+import com.healthy.basket.utils.sqliteHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,18 +30,26 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
     List<String> images;
     List<String> quantity;
     List<String> mrp;
-    List<String> price;
-
+    List<String> price; //old price
+    public static int res_id;
+    List<String> itemId;
+    List<String> desc;
+    List<String> menuId;
+    List<String> curQuantity;
     LayoutInflater inflater;
+    com.healthy.basket.utils.sqliteHelper sqliteHelper;
 
-    public AdapterRecyclerNew(Context ctx, List<String> titles, List<String> images, List<String> quantity, List<String> mrp, List<String> price){
+    public AdapterRecyclerNew(Context ctx, List<String> titles, List<String> images, List<String> quantity, List<String> mrp, List<String> price,List<String> itemId,List<String> desc,List<String> menuId,List<String> curQuantity){
         this.context=ctx;
         this.titles = titles;
         this.images = images;
         this.quantity=quantity;
         this.mrp=mrp;
         this.price=price;
-
+        this.itemId=itemId;
+        this.menuId=menuId;
+        this.desc=desc;
+        this.curQuantity=curQuantity;
         this.inflater = LayoutInflater.from(ctx);
     }
 
@@ -55,9 +67,10 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
 
         // holder.gridIcon.setImageResource(images.get(position));
         Picasso.with(context).load("https://healthybaskets.co/uploads/restaurant/"+images.get(position)).into(holder.gridIcon);
-        holder.quantity.setText(quantity.get(position));
-        holder.mrp.setText(mrp.get(position));
-        holder.price.setText(price.get(position));
+        holder.quantityView.setText(quantity.get(position));
+        holder.mrpView.setText(mrp.get(position));
+        holder.priceView.setText(price.get(position));
+
     }
 
     @Override
@@ -66,7 +79,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView title, quantity, mrp, price;
+        TextView title, quantityView, mrpView, priceView;
         ImageView gridIcon;
         Button addcartbtn;
 
@@ -75,12 +88,11 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
             super(itemView);
             title = itemView.findViewById(R.id.productName);
             gridIcon = itemView.findViewById(R.id.productImg);
-            quantity=itemView.findViewById(R.id.qnt_txt);
-            mrp=itemView.findViewById(R.id.mrp_text);
-            price=itemView.findViewById(R.id.price_new);
+            quantityView=itemView.findViewById(R.id.description);
+            mrpView=itemView.findViewById(R.id.oldPrice);
+            priceView=itemView.findViewById(R.id.price_new);
             addcartbtn=itemView.findViewById(R.id.addcartBtn);
-
-            TextView minux, plus;
+              TextView minus, plus;
 
             addcartbtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,19 +106,21 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                     final AlertDialog alertDialog = builder.create();
                     alertDialog.show();
 
-                    TextView title=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart);
-                    TextView quantity=(TextView)dialogView.findViewById(R.id.txt_DialogQuantity);
-                    TextView amount=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart_amount) ;
+                    final TextView title=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart);
+                    TextView quantityTxt=(TextView)dialogView.findViewById(R.id.txt_DialogQuantity);
+                    TextView amountTxt=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart_amount) ;
+                    final TextView selQuantity=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart_qty) ;
                     ImageView pimage=(ImageView)dialogView.findViewById(R.id.img_DialogAddToCart) ;
                     ImageView closeEd=(ImageView)dialogView.findViewById(R.id.img_DialogAddToCart_close);
                     TextView minux=(TextView)dialogView.findViewById(R.id.txt_DialogAddToCart_qtyMinus);
                     TextView plus=(TextView) dialogView.findViewById(R.id.txt_DialogAddToCart_qtyPlus);
                     CardView finalcart=(CardView)dialogView.findViewById(R.id.card_DialogAddToCart_add);
-
+                    TextView curQauntView=dialogView.findViewById(R.id.txt_DialogAddToCart_qty);
+                    curQauntView.setText(curQuantity.get(getAdapterPosition()));
 
                     title.setText(titles.get(getAdapterPosition()));
                     Picasso.with(context).load("https://healthybaskets.co/uploads/restaurant/"+images.get(getAdapterPosition())).into(pimage);
-
+                    quantityTxt.setText(quantity.get(getAdapterPosition()));
 
                    closeEd.setOnClickListener(new View.OnClickListener() {
                        @Override
@@ -119,21 +133,67 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                     minux.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
+                            int prevQuantity=Integer.parseInt(selQuantity.getText().toString());
+                            if(prevQuantity<=1){
+                                Toast.makeText(context, "Minimum Order is 1", Toast.LENGTH_SHORT).show();
+                            }else{
+                                prevQuantity--;
+                            }
+                            selQuantity.setText(String.valueOf(prevQuantity));
                         }
                     });
 
                     plus.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Toast.makeText(context, "Test", Toast.LENGTH_SHORT).show();
+                            int prevQuantity=Integer.parseInt(selQuantity.getText().toString());
+
+                                prevQuantity++;
+
+                            selQuantity.setText(String.valueOf(prevQuantity));
                         }
                     });
 
                     finalcart.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //
+                            sqliteHelper = new sqliteHelper(context);
+                            SQLiteDatabase db1 = sqliteHelper.getWritableDatabase();
+                            int currentPosition=getAdapterPosition();
+                            String productID=itemId.get(currentPosition);
+                            String quantityToBeAdded=selQuantity.getText().toString();
+                            String productName=titles.get(currentPosition);
+                            String productDescription=quantity.get(currentPosition);
+                            String productMenuId=menuId.get(currentPosition);
+                            String originalPrice=price.get(currentPosition);
+                            String oldPrice=mrp.get(currentPosition);
+                            String imageName=images.get(currentPosition);
+
+
+                            Cursor cur = db1.rawQuery("UPDATE cart SET resid ='" + res_id + "', foodid='" + productMenuId + "',foodprice ='" + quantityToBeAdded + "',restcurrency='" + originalPrice + "',foodpriceOld='" + oldPrice + "',foodImage='" + imageName+ "',kg='" + 1 + "' Where menuid ='" + productID + "';", null);
+
+                            if(cur.getCount()!=0){
+                                Toast.makeText(context, "Product Added to cart", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
+                            }
+                            else {
+
+
+                                ContentValues values = new ContentValues();
+                                values.put("menuid", productID); //PRODUCT ID
+                                values.put("foodprice", quantityToBeAdded); //QUANTITY
+                                values.put("foodname", productName); //PRODUCT NAME
+                                values.put("fooddesc", productDescription); //PRODUCT DESCRIPTION
+                                values.put("foodid", productMenuId); //MENU ID
+                                values.put("resid", "" + res_id); // restaurant ID
+                                values.put("restcurrency", originalPrice); //ORG PRICE
+                                values.put("foodpriceOld", oldPrice); //OLD PRICE
+                                values.put("foodImage", imageName); // FOOD IMAGE
+                                values.put("kg", "1"); //THIS IS SHIT
+                                db1.insert("cart", null, values);
+                                Toast.makeText(context, "Product Added to cart", Toast.LENGTH_SHORT).show();
+                                alertDialog.dismiss();
+                            }
                         }
                     });
 
@@ -143,7 +203,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked -> " + getAdapterPosition(), Toast.LENGTH_SHORT).show();
+                    addcartbtn.callOnClick();
                 }
             });
         }

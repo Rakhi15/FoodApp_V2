@@ -31,13 +31,14 @@
                 android:textColor="@android:color/black"
                 android:layout_marginLeft="5dp"
                 />
+
             <TextView
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/qnt_txt"
-                android:text="1 KG"
                 android:layout_marginLeft="5dp"
-                />
+                android:text="1 KG"
+                android:textColor="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -56,7 +57,7 @@
                     android:text="₹ 210.0"
                     android:textColor="@android:color/black"
                     android:layout_marginLeft="5dp"
-                    android:id="@+id/mrp_text"
+                    android:id="@+id/oldPrice"
 
                     />
 
@@ -73,17 +74,18 @@
                     android:textColor="@android:color/black"
 
                     />
+
                 <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:id="@+id/addcartBtn"
-                    android:text="Add"
-                    android:background="#ED9007"
-                    android:padding="2dp"
-                    android:gravity="right"
+                    android:layout_width="55dp"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="13dp"
                     android:layout_marginRight="10dp"
-                    />
+                    android:background="#ED9007"
+                    android:gravity="center"
+                    android:padding="2dp"
+                    android:text="Add" />
 
             </RelativeLayout>
 

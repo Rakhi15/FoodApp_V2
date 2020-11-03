@@ -23,6 +23,7 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.text.Editable;
 import android.text.Spannable;
@@ -127,6 +128,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
@@ -188,8 +190,15 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 
     //oakspro
 
+    String announcement=null;
+    long startMilliSeconds=-1;
+    long endMilliSeconds=-1;
+    long presentMilliSeconds;
+    int res_id;
     ImageView meatMutton;
     TextView notificationtxt;
+    LinearLayout notificationPanel;
+    TextView openCloseTime;
 
 
     //oakspro end
@@ -208,6 +217,9 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
         setContentView(R.layout.activity_main);
 
         meatMutton=(ImageView)findViewById(R.id.muttonMeat);
+        notificationPanel=(LinearLayout) findViewById(R.id.announcePanel);
+        openCloseTime=(TextView) findViewById(R.id.openclose_timing);
+        notificationtxt=(TextView)findViewById(R.id.marqueeTxt);
 
         FirebaseApp.initializeApp(this);
         FirebaseInstanceId.getInstance().getInstanceId();
@@ -261,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 //        gridView.setNestedScrollingEnabled(false);
         productlist = new ArrayList<>();
 
-
+        /* Muked by Rajeswar listeners will be set dynamically
         notificationtxt=findViewById(R.id.marqueeTxt);
         notificationtxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
         notificationtxt.setSelected(true);
@@ -274,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                 Intent mutton_intent=new Intent(MainActivity.this, MuttonOrderActivity.class);
                 startActivity(mutton_intent);
             }
-        });
+        });*/
 
 
         RelativeLayout cardView = findViewById(R.id.mainOrderMedicine);
@@ -1373,6 +1385,105 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
             productlist.clear();
             URL hp;
             try {
+
+                //OAKSPRO
+                // SET SCHEDULED ORDERS AND MARQ NOTIFICATIONS
+                int resID = 7;
+
+                resID = Integer.parseInt(params[0]) > 0 ? Integer.parseInt(params[0]) : 7;
+                res_id = resID;
+
+                try {
+
+                    hp = new URL(getString(R.string.link) + getString(R.string.servicepath) + "/getSchedule.php?res_id=" + resID);
+                    Log.e("URLmenu", "" + hp);
+                    URLConnection ohpCon = hp.openConnection();
+                    ohpCon.connect();
+                    InputStream oinput = ohpCon.getInputStream();
+                    Log.d("input", "" + oinput);
+                    BufferedReader schedulerReader = new BufferedReader(new InputStreamReader(oinput));
+                    String y;
+                    y = schedulerReader.readLine();
+                    StringBuilder totalBuilder = new StringBuilder();
+                    while (y != null) {
+                        totalBuilder.append(y);
+                        y = schedulerReader.readLine();
+                    }
+                    Log.e("URL", "" + totalBuilder);
+                    JSONObject jsonObject = new JSONObject(totalBuilder.toString());
+                    String success = jsonObject.getString("status");
+                    if (success.equals("Success")) {
+
+
+                        JSONObject scheduleDetails = jsonObject.getJSONObject("Schedule");
+                        Calendar currentDate = Calendar.getInstance();
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+
+                        Date finalDay = (Date) sdf.parse(scheduleDetails.getString("end_date"));
+                        Date startDay = (Date) sdf.parse(scheduleDetails.getString("start_date"));
+                        startMilliSeconds = startDay.getTime();
+                        endMilliSeconds = finalDay.getTime();
+                        //numberOfDays = (int) ((finalDay.getTime() - currentTime.getTime()) / (3600 * 24 * 1000));
+
+
+                    }
+                }catch(Exception e){
+                    //CANNOT GET SCHEDULED ITEMS CONTINUE NORMALLY
+                }
+
+                try {
+                    hp = new URL(getString(R.string.link) + getString(R.string.servicepath) + "/getAnnouncements.php?res_id=" + resID);
+                    Log.e("URLmenu", "" + hp);
+                    URLConnection ohpCon = hp.openConnection();
+                    ohpCon.connect();
+                    InputStream oinput = ohpCon.getInputStream();
+                    Log.d("input", "" + oinput);
+                    BufferedReader schedulerReader = new BufferedReader(new InputStreamReader(oinput));
+                    String y;
+                    y = schedulerReader.readLine();
+                    StringBuilder totalBuilder = new StringBuilder();
+                    while (y != null) {
+                        totalBuilder.append(y);
+                        y = schedulerReader.readLine();
+                    }
+                    Log.e("URL", "" + totalBuilder);
+                    JSONObject jsonObject = new JSONObject(totalBuilder.toString());
+                    String success = jsonObject.getString("status");
+                    if (success.equals("Success")) {
+                        announcement = jsonObject.getJSONObject("Announcement").getString("Announcement");
+
+
+                    }
+                }catch(Exception e){
+                    //do nothing continue its not important
+                }
+
+
+
+
+
+
+
+
+
+
+
+                //END OF SCHEDULED ORDERS AND NOTIFICATIONS
+
+
+
+
+                //OAKSPRO END
+
+
+
+
+
+
+
+
+
                 productlist.clear();
                 hp = new URL(getString(R.string.link) + getString(R.string.servicepath) + "/homecatres.php?res_id="+params[0]);
                 Log.e("URLmenu", "" + hp);
@@ -1438,6 +1549,131 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
         @Override
         protected void onPostExecute(Void aVoid) {
+
+
+            //OAKSPRO SETTING UI OF SCHEDULE
+
+            //OAKSPRO START
+            if(announcement!=null && !announcement.equals("")){
+                notificationtxt.setText(announcement);
+                notificationPanel.setVisibility(View.VISIBLE);
+                notificationtxt.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+                notificationtxt.setSelected(true);
+            }
+            if(startMilliSeconds>0) {
+                meatMutton.setVisibility(View.VISIBLE);
+                meatMutton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
+                        mutton_intent.putExtra("res_id", res_id);
+                        startActivity(mutton_intent);
+                    }
+                });
+                presentMilliSeconds = System.currentTimeMillis();
+                if (endMilliSeconds < presentMilliSeconds) {
+                    openCloseTime.setText("Orders Closed");
+                    meatMutton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getApplicationContext(), "Sorry, Too late orders are closed", Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                    openCloseTime.setVisibility(View.VISIBLE);
+                } else {
+                    final long countTime;
+                    String temp;
+                    if (startMilliSeconds > presentMilliSeconds) {
+                        countTime = startMilliSeconds;
+                        temp = "Open";
+                        meatMutton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(), "Hola !! Orders are not yet opened", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+
+                    } else {
+                        countTime = endMilliSeconds;
+                        temp = "Close";
+
+                    }
+                    final String countType = temp;
+
+
+                    CountDownTimer mCountDownTimer = new CountDownTimer(countTime, 1000) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+
+                            presentMilliSeconds = presentMilliSeconds - 1;
+                            Long serverUptimeSeconds =
+                                    (millisUntilFinished - presentMilliSeconds) / 1000;
+                            if (serverUptimeSeconds < 0) {
+                                if (countType.equals("Open")) {
+                                    openCloseTime.setText("Orders Opened");
+                                    meatMutton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
+                                            startActivity(mutton_intent);
+                                        }
+                                    });
+                                    return;
+                                } else {
+                                    openCloseTime.setText("Orders Closed");
+                                    meatMutton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(getApplicationContext(), "Sorry, Too late orders are closed", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    });
+                                    return;
+                                }
+                            }
+
+                            String daysLeft = String.format("%d", serverUptimeSeconds / 86400);
+
+
+                            String hoursLeft = String.format("%d", (serverUptimeSeconds % 86400) / 3600);
+
+
+                            String minutesLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) / 60);
+
+
+                            String secondsLeft = String.format("%d", ((serverUptimeSeconds % 86400) % 3600) % 60);
+
+
+                            openCloseTime.setVisibility(View.VISIBLE);
+                            openCloseTime.setText("Orders Will " + countType + " In " + daysLeft + " D :" + hoursLeft + " Hrs:" + minutesLeft + " Mins:" + secondsLeft + "s");
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            if (countType.equals("Open")) {
+                                openCloseTime.setText("Orders Opened");
+                            } else {
+                                openCloseTime.setText("Orders Closed");
+                            }
+                        }
+                    }.start();
+                    //OAKSPRO END
+                }
+            }
+
+            //OAKSPRO END OF UI SETTING
+
+
+
+
+
+
+
             super.onPostExecute(aVoid);
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();

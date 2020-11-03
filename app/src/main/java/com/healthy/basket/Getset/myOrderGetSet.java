@@ -7,6 +7,24 @@ public class myOrderGetSet {
     private String order_dateTime;
     private String order_id;
     private String order_total;
+    private boolean is_scheduled;
+    private String scheduled_time;
+
+    public boolean isIs_scheduled() {
+        return is_scheduled;
+    }
+
+    public void setIs_scheduled(boolean is_scheduled) {
+        this.is_scheduled = is_scheduled;
+    }
+
+    public String getScheduled_time() {
+        return scheduled_time;
+    }
+
+    public void setScheduled_time(String scheduled_time) {
+        this.scheduled_time = scheduled_time;
+    }
 
     public String getResName() {
         return resName;

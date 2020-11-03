@@ -796,6 +796,8 @@ public class Cart extends AppCompatActivity {
 
     private String calculateTotal(String origonalPrice, String qty) {
         try {
+            if(origonalPrice.equals(""))
+                origonalPrice="0";
             int price = Integer.parseInt(origonalPrice);
             int intQty = Integer.parseInt(qty);
             price = price * intQty;
@@ -808,6 +810,8 @@ public class Cart extends AppCompatActivity {
     private String calculateSaved(String origonalPrice, String oldPrice, String qty) {
         try {
             int price = Integer.parseInt(origonalPrice);
+            if(oldPrice.equals(""))
+                oldPrice="0";
             int old = Integer.parseInt(oldPrice);
             int q = Integer.parseInt(qty);
             price = old-price;
