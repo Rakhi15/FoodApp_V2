@@ -344,6 +344,7 @@
                                     android:id="@+id/openclose_timing"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:fontFamily="@font/poppins_medium"
                                     android:text="Orders will close within 2D: 22Mins : 30 s"
                                     android:textAlignment="center"
                                     android:textColor="#E61708"

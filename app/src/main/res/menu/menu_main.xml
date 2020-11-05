@@ -8,7 +8,7 @@
         android:title=""
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/refresh_new"
+        android:icon="@drawable/reload"
         />
     <item android:id="@+id/action_setting"
         android:title=""
