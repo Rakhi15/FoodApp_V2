@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,6 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
     List<String> curQuantity;
     LayoutInflater inflater;
     com.healthy.basket.utils.sqliteHelper sqliteHelper;
-
     public AdapterRecyclerNew(Context ctx, List<String> titles, List<String> images, List<String> quantity, List<String> mrp, List<String> price,List<String> itemId,List<String> desc,List<String> menuId,List<String> curQuantity){
         this.context=ctx;
         this.titles = titles;
@@ -58,6 +58,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = inflater.inflate(R.layout.custom_grid_layout,parent,false);
+
         return new ViewHolder(view);
     }
 
@@ -166,14 +167,15 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                             String productDescription=quantity.get(currentPosition);
                             String productMenuId=menuId.get(currentPosition);
                             String originalPrice=price.get(currentPosition);
-                            String oldPrice=mrp.get(currentPosition);
+                            String oldPrice=mrp.get(currentPosition).isEmpty()?price.get(currentPosition):mrp.get(currentPosition);
                             String imageName=images.get(currentPosition);
 
-
-                            Cursor cur = db1.rawQuery("UPDATE cart SET resid ='" + res_id + "', foodid='" + productMenuId + "',foodprice ='" + quantityToBeAdded + "',restcurrency='" + originalPrice + "',foodpriceOld='" + oldPrice + "',foodImage='" + imageName+ "',kg='" + 1 + "' Where menuid ='" + productID + "';", null);
-
+                            Cursor cur = db1.rawQuery("select * from cart where menuid='"+productID+"';",null);
                             if(cur.getCount()!=0){
-                                Toast.makeText(context, "Product Added to cart", Toast.LENGTH_SHORT).show();
+                                    cur = db1.rawQuery("UPDATE cart SET resid ='" + res_id + "', foodid='" + productMenuId + "',foodprice ='" + quantityToBeAdded + "',restcurrency='" + originalPrice + "',foodpriceOld='" + oldPrice + "',foodImage='" + imageName+ "',kg='" + 1 + "' Where menuid ='" + productID + "';", null);
+
+                                   Toast.makeText(context, "Product Updated in cart", Toast.LENGTH_SHORT).show();
+
                                 alertDialog.dismiss();
                             }
                             else {
@@ -192,6 +194,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                                 values.put("kg", "1"); //THIS IS SHIT
                                 db1.insert("cart", null, values);
                                 Toast.makeText(context, "Product Added to cart", Toast.LENGTH_SHORT).show();
+
                                 alertDialog.dismiss();
                             }
                         }

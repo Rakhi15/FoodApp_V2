@@ -186,7 +186,15 @@ public class CompleteOrder extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
+        Button viewOrderDetails = findViewById(R.id.viewOrderDetails);
+        viewOrderDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CompleteOrder.this, OrderSpecification.class);
+                i.putExtra("OrderId", orderId);
+                startActivity(i);
+            }
+        });
 
     }
 

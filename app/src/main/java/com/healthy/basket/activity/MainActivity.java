@@ -294,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
             @Override
             public void onClick(View view) {
                 Intent iv = new Intent(MainActivity.this, UploadMedicalOrderActivity.class);
+                iv.putExtra("res_id",res_id);
                 startActivity(iv);
             }
         });
@@ -693,6 +694,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
             @Override
             public void onClick(View v) {
                 Intent iv = new Intent(MainActivity.this, UploadMedicalOrderActivity.class);
+                iv.putExtra("res_id",res_id);
                 startActivity(iv);
             }
         });

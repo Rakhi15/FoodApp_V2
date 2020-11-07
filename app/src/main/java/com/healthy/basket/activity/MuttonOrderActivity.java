@@ -1,9 +1,13 @@
 package com.healthy.basket.activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,13 +21,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.healthy.basket.Getset.detailgetset;
 import com.healthy.basket.R;
+import com.healthy.basket.utils.GPSTracker;
 import com.healthy.basket.utils.sqliteHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +46,7 @@ public class MuttonOrderActivity extends AppCompatActivity {
 
 
     RecyclerView dataList;
-
+    private static ArrayList<detailgetset>  detaillist = new ArrayList<>();;
     List<String> title;
     List<String> quantity;
     List<String> mrp;
@@ -45,6 +58,8 @@ public class MuttonOrderActivity extends AppCompatActivity {
     List<String> curQuantities;
     String api_getP="https://healthybaskets.co/api/getScheduledItems.php?res_id=";
     int res_id;
+    private double latitudecur;
+    private double longitudecur;
     AdapterRecyclerNew adapter;
     ProgressDialog progressDialog;
     HashMap<String, String> prevCartQuantities;
@@ -55,13 +70,33 @@ public class MuttonOrderActivity extends AppCompatActivity {
     CardView add_cart;
 
     */
+    public  MuttonOrderActivity(){
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        res_id=this.getIntent().getIntExtra("res_id",7);
+
         setContentView(R.layout.activity_order_mutton);
+        gettingGPSLocation();
 
 
         dataList=findViewById(R.id.recyclerviewRakhi);
+        FloatingActionButton cartButton=findViewById(R.id.detailPageFab);
+        cartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent iv = new Intent(MuttonOrderActivity.this, Cart.class);
+                iv.putExtra("detail_id", res_id);
+                iv.putExtra("restaurent_name", detaillist.get(0).getName());
+                iv.putExtra("delivery_charge", detaillist.get(0).getDelivery_charg());
+                iv.putExtra("minimum_order", detaillist.get(0).getDelivery_time());
+                iv.putExtra("time", detaillist.get(0).getTime());
+                startActivityForResult(iv, 100);
+            }
+        });
+
         /*
 
         txt_quantity_display=findViewById(R.id.txt_AddToCart_qty);
@@ -119,7 +154,6 @@ public class MuttonOrderActivity extends AppCompatActivity {
         desc=new ArrayList<>();
         menuId=new ArrayList<>();
         curQuantities=new ArrayList<>();
-        res_id=this.getIntent().getIntExtra("res_id",7);
 
         letsShakeRey();
 
@@ -228,8 +262,85 @@ public class MuttonOrderActivity extends AppCompatActivity {
         requestQueue.add(request);
 
 
+        StringRequest detaildReq=new StringRequest(Request.Method.GET, "https://healthybaskets.co/api/getrestaurantdetail.php?res_id=" + res_id + "&lat=" + latitudecur + "&" + "lon=" + longitudecur, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jObject = new JSONArray(response);
+                    Log.d("URL12", "" + jObject);
+                    JSONObject Obj1;
+                    Obj1 = jObject.getJSONObject(0);
+                    switch (Obj1.getString("status")) {
+                        case "Success":
+                            JSONObject jsonO = Obj1.getJSONObject("Restaurant_Detail");
+                            detailgetset temp = new detailgetset();
+                            temp.setId(jsonO.getString("id"));
+                            temp.setName(jsonO.getString("name"));
+                            temp.setAddress(jsonO.getString("address"));
+                            temp.setTime(jsonO.getString("time"));
+                            temp.setDelivery_time(jsonO.getString("delivery_time"));
+                            temp.setCurrency(jsonO.getString("currency"));
+                            temp.setPhoto(jsonO.getString("photo"));
+                            temp.setPhone(jsonO.getString("phone"));
+                            temp.setLat(jsonO.getString("lat"));
+                            temp.setLon(jsonO.getString("lon"));
+                            temp.setDesc(jsonO.getString("desc"));
+                            temp.setEmail(jsonO.getString("email"));
+                            temp.setLocation(jsonO.getString("address"));
+                            temp.setRatting(jsonO.getString("ratting"));
+                            temp.setRes_status(jsonO.getString("res_status"));
+                            temp.setDelivery_charg(jsonO.getString("delivery_charg"));
+                            temp.setDistance(jsonO.getString("distance"));
+                            temp.setCategory(jsonO.getString("Category"));
+                            temp.setFree_del_km(jsonO.getString("free_del_km"));
+                            temp.setPer_km_charge(jsonO.getString("per_km_charge"));
+                            temp.setCategory(jsonO.getString("Category"));
+                            String catname = jsonO.getString("Category");
+                            Log.e("catname", "" + catname);
+                            detaillist.add(temp);
+                            Log.e("detaillist", detaillist.get(0).getName());
+                            break;
+                        case "Failed":
+                            final String error = Obj1.getString("Error");
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                        default:
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), "Please try again later!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            break;
+                    }
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Please try again later!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        },new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params=new HashMap<String, String>();
+                    return params;
+                }
+        };
+
+        requestQueue.add(detaildReq);
     }
+
 
     /*
     private void calculateRaji() {
@@ -244,4 +355,25 @@ public class MuttonOrderActivity extends AppCompatActivity {
 
      */
 
+
+
+    private void gettingGPSLocation(){
+        GPSTracker gps = new GPSTracker();
+        gps.init(getApplicationContext());        // check if GPS enabled
+        if (gps.canGetLocation()) {
+            try {
+                latitudecur = gps.getLatitude();
+                longitudecur = gps.getLongitude();
+                Log.w("Current Location", "Lat: " + latitudecur + "Long: " + longitudecur);
+            } catch (NullPointerException | NumberFormatException e) {
+                // TODO: handle exception
+                Log.e("Error", e.getMessage());
+            }
+
+        } else {
+            gps.showSettingsAlert();
+        }
+
+
+    }
 }
