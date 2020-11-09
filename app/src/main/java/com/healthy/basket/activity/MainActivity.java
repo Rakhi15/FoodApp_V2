@@ -103,6 +103,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.healthy.basket.utils.sqliteHelper;
 import com.squareup.picasso.Picasso;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -189,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 
 
     //oakspro
-
+    ArrayList<String> sliderImages=new ArrayList<>();
     String announcement=null;
     long startMilliSeconds=-1;
     long endMilliSeconds=-1;
@@ -1419,6 +1421,14 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 
                         JSONObject scheduleDetails = jsonObject.getJSONObject("Schedule");
                         Calendar currentDate = Calendar.getInstance();
+                        String imgs[]=scheduleDetails.getString("images").split(",");
+                        for(int i=0;i<imgs.length;i++){
+                            if(!imgs[i].equals("")){
+                                sliderImages.add(imgs[i]);
+                            }
+                        }
+
+
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
 
@@ -1563,8 +1573,26 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                 notificationtxt.setSelected(true);
             }
             if(startMilliSeconds>0) {
-                meatMutton.setVisibility(View.VISIBLE);
-                meatMutton.setOnClickListener(new View.OnClickListener() {
+
+
+
+
+                ImageListener imageListener = new ImageListener() {
+                    @Override
+                    public void setImageForPosition(int position, ImageView imageView) {
+                        Picasso.with(getApplicationContext()).load("https://healthybaskets.co/uploads/restaurant/"+sliderImages.get(position)).into(imageView);
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
+                                mutton_intent.putExtra("res_id", res_id);
+                                startActivity(mutton_intent);
+                            }
+                        });
+                    }
+                };
+                CarouselView carouselView = findViewById(R.id.carouselView);
+                carouselView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
@@ -1572,6 +1600,21 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                         startActivity(mutton_intent);
                     }
                 });
+                carouselView.setImageListener(imageListener);
+                carouselView.setPageCount(sliderImages.size());
+                if(sliderImages.size()>0){
+                    carouselView.setVisibility(View.VISIBLE);
+                }else{
+                    meatMutton.setVisibility(View.VISIBLE);
+                    meatMutton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
+                            mutton_intent.putExtra("res_id", res_id);
+                            startActivity(mutton_intent);
+                        }
+                    });
+                }
                 presentMilliSeconds = System.currentTimeMillis();
                 if (endMilliSeconds < presentMilliSeconds) {
                     openCloseTime.setText("Orders Closed");
@@ -1651,7 +1694,7 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
 
 
                             openCloseTime.setVisibility(View.VISIBLE);
-                            openCloseTime.setText("Orders Will " + countType + " In " + daysLeft + " D :" + hoursLeft + " Hrs:" + minutesLeft + " Mins:" + secondsLeft + "s");
+                            openCloseTime.setText("Orders Will " + countType + " In \n" + daysLeft + " D :" + hoursLeft + " Hrs:" + minutesLeft + " Mins:" + secondsLeft + "s");
 
                         }
 

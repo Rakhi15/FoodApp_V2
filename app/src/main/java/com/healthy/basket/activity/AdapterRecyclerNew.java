@@ -162,7 +162,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                             SQLiteDatabase db1 = sqliteHelper.getWritableDatabase();
                             int currentPosition=getAdapterPosition();
                             String productID=itemId.get(currentPosition);
-                            String quantityToBeAdded=selQuantity.getText().toString();
+                            Integer quantityToBeAdded=Integer.parseInt(selQuantity.getText().toString());
                             String productName=titles.get(currentPosition);
                             String productDescription=quantity.get(currentPosition);
                             String productMenuId=menuId.get(currentPosition);
@@ -170,15 +170,25 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                             String oldPrice=mrp.get(currentPosition).isEmpty()?price.get(currentPosition):mrp.get(currentPosition);
                             String imageName=images.get(currentPosition);
 
-                            Cursor cur = db1.rawQuery("select * from cart where menuid='"+productID+"';",null);
+                                Cursor cur = db1.rawQuery("select * from cart where menuid='"+productID+"';",null);
                             if(cur.getCount()!=0){
-                                    cur = db1.rawQuery("UPDATE cart SET resid ='" + res_id + "', foodid='" + productMenuId + "',foodprice ='" + quantityToBeAdded + "',restcurrency='" + originalPrice + "',foodpriceOld='" + oldPrice + "',foodImage='" + imageName+ "',kg='" + 1 + "' Where menuid ='" + productID + "';", null);
+                                cur.close();
+                                try {
+                                        //Cursor updatecur = db1.rawQuery("UPDATE cart SET restcurrency ='" +originalPrice+ "', foodpriceOld = '"+oldPrice+"', foodprice='"+quantityToBeAdded+"' Where menuid ='" + menuId + "';", null);
+                                    Cursor updatecur = db1.rawQuery("DELETE from cart Where menuid ='" + productID + "';", null);
+                                    Log.e("QUERY ", ""+updatecur.getCount());
+                                    updatecur.close();
 
-                                   Toast.makeText(context, "Product Updated in cart", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Product Updated in cart", Toast.LENGTH_SHORT).show();
 
-                                alertDialog.dismiss();
+                                } catch (Exception e) {
+                                    Toast.makeText(context, "Cannot Updated in cart, Try Again !", Toast.LENGTH_SHORT).show();
+
+                                    Log.e("Error", e.getMessage());
+                                }
                             }
-                            else {
+                           // else
+                                {
 
 
                                 ContentValues values = new ContentValues();
@@ -194,7 +204,7 @@ public class AdapterRecyclerNew extends RecyclerView.Adapter<AdapterRecyclerNew.
                                 values.put("kg", "1"); //THIS IS SHIT
                                 db1.insert("cart", null, values);
                                 Toast.makeText(context, "Product Added to cart", Toast.LENGTH_SHORT).show();
-
+                                    db1.close();
                                 alertDialog.dismiss();
                             }
                         }

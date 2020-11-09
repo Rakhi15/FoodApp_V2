@@ -330,6 +330,20 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
+
+                                <com.synnapps.carouselview.CarouselView
+                                    android:id="@+id/carouselView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="220dp"
+                                    android:visibility="gone"
+                                    app:fillColor="#FFFFFFFF"
+                                    app:pageColor="#00000000"
+                                    app:radius="6dp"
+                                    app:slideInterval="3000"
+                                    app:strokeColor="#FF777777"
+                                    app:strokeWidth="1dp"
+                                    tools:visibility="visible" />
+
                                 <ImageView
                                     android:id="@+id/muttonMeat"
                                     android:layout_width="match_parent"
@@ -347,7 +361,7 @@
                                     android:fontFamily="@font/poppins_medium"
                                     android:text="Orders will close within 2D: 22Mins : 30 s"
                                     android:textAlignment="center"
-                                    android:textColor="#E61708"
+                                    android:textColor="@color/black"
                                     android:textSize="20sp"
                                     android:visibility="gone"
                                     tools:visibility="visible" />

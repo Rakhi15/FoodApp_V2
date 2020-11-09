@@ -538,14 +538,15 @@
                 android:text="0"
                 android:elevation="7dp"
                 android:background="@drawable/cart_btn_rounded"/>
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/detailPageFab"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom|end"
                 android:src="@drawable/ic_cart"
-                app:fabSize="normal"
-                app:backgroundTint="@color/white" />
+                app:backgroundTint="@color/white"
+                app:fabSize="normal" />
 
 
         </RelativeLayout>
