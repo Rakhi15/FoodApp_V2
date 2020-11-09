@@ -1574,13 +1574,14 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
             }
             if(startMilliSeconds>0) {
 
-
+            final ArrayList<ImageView> imViews=new ArrayList<>();
 
 
                 ImageListener imageListener = new ImageListener() {
                     @Override
                     public void setImageForPosition(int position, ImageView imageView) {
                         Picasso.with(getApplicationContext()).load("https://healthybaskets.co/uploads/restaurant/"+sliderImages.get(position)).into(imageView);
+                        imViews.add(imageView);
                         imageView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1618,6 +1619,18 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                 presentMilliSeconds = System.currentTimeMillis();
                 if (endMilliSeconds < presentMilliSeconds) {
                     openCloseTime.setText("Orders Closed");
+
+                    for(int iml=0;iml<imViews.size();iml++)
+                    {
+                        imViews.get(iml).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getApplicationContext(), "Sorry, Too late orders are closed", Toast.LENGTH_LONG).show();
+
+                            }
+                        });
+                    }
+
                     meatMutton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -1633,6 +1646,16 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                     if (startMilliSeconds > presentMilliSeconds) {
                         countTime = startMilliSeconds;
                         temp = "Open";
+                        for(int iml=0;iml<imViews.size();iml++)
+                        {
+                            imViews.get(iml).setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(getApplicationContext(), "Hola !! Orders are not yet opened", Toast.LENGTH_LONG).show();
+
+                                }
+                            });
+                        }
                         meatMutton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -1660,6 +1683,16 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                             if (serverUptimeSeconds < 0) {
                                 if (countType.equals("Open")) {
                                     openCloseTime.setText("Orders Opened");
+                                    for(int iml=0;iml<imViews.size();iml++)
+                                    {
+                                        imViews.get(iml).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent mutton_intent = new Intent(MainActivity.this, MuttonOrderActivity.class);
+                                                startActivity(mutton_intent);
+                                            }
+                                        });
+                                    }
                                     meatMutton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -1670,6 +1703,17 @@ public class MainActivity extends AppCompatActivity implements CustomButtonListe
                                     return;
                                 } else {
                                     openCloseTime.setText("Orders Closed");
+                                    for(int iml=0;iml<imViews.size();iml++)
+                                    {
+                                        imViews.get(iml).setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Toast.makeText(getApplicationContext(), "Sorry, Too late orders are closed", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        });
+                                    }
+
                                     meatMutton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
