@@ -265,7 +265,12 @@ public class MyOrderPage extends AppCompatActivity {
 
             TextView txt_order_date = vi.findViewById(R.id.txt_order_date);
             if(dat.get(position).isIs_scheduled()) {
-                if(dat.get(position).getScheduled_time().equals("0"))
+
+                int deliveryDueDate =Integer.parseInt(dat.get(position).getScheduled_time());
+                if(deliveryDueDate<0){
+                    txt_order_date.setText("");
+                }
+                else if(dat.get(position).getScheduled_time().equals("0"))
                     txt_order_date.setText("Arriving Today");
                 else
                     txt_order_date.setText("Arriving In "+dat.get(position).getScheduled_time()+ " Day(s)");
