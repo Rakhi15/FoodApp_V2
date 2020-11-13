@@ -2,6 +2,7 @@ package com.healthy.basket.utils;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import com.healthy.basket.R;
 import com.healthy.basket.activity.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.healthy.basket.activity.MyOrderPage;
 
 import org.json.JSONObject;
 
@@ -199,7 +201,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
+
         }
+
+        Intent intent34=new Intent(getApplicationContext(), MyOrderPage.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this, 0, intent34, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder mBuilder1 = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon( R.drawable.ic_launcher)
@@ -207,8 +213,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),
                         R.mipmap.ic_launcher))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
 
+        mBuilder1.addAction(android.R.drawable.ic_menu_view, "Open", pendingIntent);
         notificationManager.notify(123, mBuilder1.build());
         playSound();
     }
